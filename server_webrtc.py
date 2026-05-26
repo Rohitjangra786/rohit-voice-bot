@@ -43,10 +43,53 @@ from pipecat.services.cartesia.tts import CartesiaTTSService
 from pipecat.services.deepgram.stt import DeepgramSTTService
 from pipecat.services.groq.llm import GroqLLMService
 from pipecat.transports.base_transport import TransportParams
+from pipecat.transports.smallwebrtc.connection import (
+    IceServer,
+    SmallWebRTCConnection,
+)
 
 from prompts import INSTITUTE_FACTS, SYSTEM_PROMPT
 
 load_dotenv()
+
+
+# ---------------------------------------------------------------------------
+# ICE / TURN configuration
+# ---------------------------------------------------------------------------
+# When hosted on a provider that blocks inbound UDP (Render free tier,
+# many corporate networks), the browser cannot reach the server directly
+# over UDP. A TURN relay sits on the public internet over TCP/TLS, and
+# both endpoints talk to it. We default to OpenRelay's free public TURN
+# (https://www.metered.ca/tools/openrelay/), override via env vars if you
+# want your own (twilio / xirsys / coturn behind a VPS).
+def _ice_servers() -> list[IceServer]:
+    turn_urls = os.environ.get(
+        "TURN_URLS",
+        "turn:openrelay.metered.ca:80?transport=tcp,"
+        "turn:openrelay.metered.ca:443?transport=tcp,"
+        "turns:openrelay.metered.ca:443",
+    ).split(",")
+    return [
+        IceServer(urls="stun:stun.l.google.com:19302"),
+        IceServer(
+            urls=[u.strip() for u in turn_urls if u.strip()],
+            username=os.environ.get("TURN_USERNAME", "openrelayproject"),
+            credential=os.environ.get("TURN_CREDENTIAL", "openrelayproject"),
+        ),
+    ]
+
+
+_orig_swrtc_init = SmallWebRTCConnection.__init__
+
+
+def _patched_swrtc_init(self, *args, ice_servers=None, **kwargs):
+    """Inject TURN servers when Pipecat's runner doesn't pass any."""
+    if not ice_servers:
+        ice_servers = _ice_servers()
+    _orig_swrtc_init(self, *args, ice_servers=ice_servers, **kwargs)
+
+
+SmallWebRTCConnection.__init__ = _patched_swrtc_init
 
 
 END_CALL = FunctionSchema(
