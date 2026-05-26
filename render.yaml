@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: rohit-voice-bot
+    runtime: python
+    plan: free
+    region: oregon
+    pythonVersion: "3.12"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server_webrtc.py -t webrtc --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHONIOENCODING
+        value: utf-8
+      - key: PYTHONUTF8
+        value: "1"
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: DEEPGRAM_API_KEY
+        sync: false
+      - key: CARTESIA_API_KEY
+        sync: false
+      - key: CARTESIA_VOICE_ID
+        sync: false

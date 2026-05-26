@@ -2,6 +2,11 @@
 
 **Author:** Rohit Jangra
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Rohitjangra786/rohit-voice-bot)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/github/Rohitjangra786/rohit-voice-bot)
+
+> One-click deploys the browser-talkable version (`server_webrtc.py`). You'll be asked for `GROQ_API_KEY`, `DEEPGRAM_API_KEY`, `CARTESIA_API_KEY`, and `CARTESIA_VOICE_ID` during setup. Note: free tiers on both platforms route WebRTC over TCP only (no UDP), so voice quality is fine but latency is ~100-200ms higher than a UDP-capable host. For production use Fly.io / a VPS / Daily.co transport.
+
 Rohit is a real-time voice agent that runs the IITM Janak Puri RLTV
 admissions script — greeting, eligibility check, entrance-exam check,
 course information, objection handling, and transfer to a human admission
