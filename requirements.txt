@@ -1,0 +1,22 @@
+# Rohit voice bot — dependencies
+# Pinned to a known-good range. Pipecat moves fast; if imports break,
+# check https://docs.pipecat.ai for your installed version.
+
+# Pipecat with the service extras Rohit needs:
+#   deepgram  -> speech to text
+#   anthropic -> the LLM (the "brain")
+#   cartesia  -> text to speech
+#   silero    -> voice-activity detection (end-of-speech)
+pipecat-ai[deepgram,anthropic,cartesia,silero]>=0.0.60
+
+# Web server + Twilio media-stream websocket
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+websockets>=12.0
+
+# Telephony
+twilio>=9.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+loguru>=0.7.0

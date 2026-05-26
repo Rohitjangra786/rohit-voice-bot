@@ -1,0 +1,17 @@
+.env
+venv/
+__pycache__/
+*.pyc
+*.log
+
+# Editor / agent state
+.claude/
+.idea/
+.vscode/
+.DS_Store
+
+# Local tunnel binary — let users install their own
+cloudflared.exe
+cloudflared
+ngrok.exe
+ngrok
