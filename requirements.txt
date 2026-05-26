@@ -4,10 +4,18 @@
 
 # Pipecat with the service extras Rohit needs:
 #   deepgram  -> speech to text
-#   anthropic -> the LLM (the "brain")
+#   anthropic -> the LLM (the "brain"; alternate to Groq)
+#   groq      -> the LLM Groq path used by test_local.py and server_webrtc.py
 #   cartesia  -> text to speech
 #   silero    -> voice-activity detection (end-of-speech)
-pipecat-ai[deepgram,anthropic,cartesia,silero]>=0.0.60
+#   webrtc    -> aiortc + opencv, needed by server_webrtc.py
+#   runner    -> FastAPI runner + prebuilt browser UI for server_webrtc.py
+#
+# For LOCAL mic+speakers testing (test_local.py) also run:
+#   pip install 'pipecat-ai[local]'
+# (skipped from this file because [local] pulls PyAudio, which needs
+# portaudio system libs that aren't installed on Render/Railway by default.)
+pipecat-ai[deepgram,anthropic,groq,cartesia,silero,webrtc,runner]>=1.2.0
 
 # Web server + Twilio media-stream websocket
 fastapi>=0.115.0
